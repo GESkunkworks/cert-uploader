@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 1.1.8
+- New version for support on public PyPi
+
 ## 1.1.4
 - Added support for rolling back a certificate assignment
 
