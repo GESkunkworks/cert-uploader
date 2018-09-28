@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 1.1.9
+- Update requirements
+
 ## 1.1.8
 - New version for support on public PyPi
 
