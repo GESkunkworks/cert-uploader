@@ -14,10 +14,10 @@ setup(
     author='Michael Palmer',
     author_email='github@michaeldpalmer.com',
     packages=find_packages(),
-    setup_requires=['setuptools_scm~=2.0.0'],
+    setup_requires=['setuptools_scm~=3.1.0'],
     install_requires=[
         'boto3~=1.7.16',
-        'cryptography~=2.2.2',
+        'cryptography~=2.3.0',
         'pyOpenSSL~=17.5.0',
         'scandir~=1.7;python_version<"3.0"',
         'six~=1.11.0'
