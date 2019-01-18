@@ -231,7 +231,10 @@ def main():
         }
 
         if options.type == 'iam':
-            upload_kwargs.update({'name': options.certificate_name})
+            upload_kwargs.update({
+                'name': options.certificate_name,
+                'iam_path': options.iam_path
+            })
 
         # Perform the upload
         arn = uploader.upload_certificate(**upload_kwargs)
