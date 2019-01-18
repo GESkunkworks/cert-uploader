@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 1.1.11
+- Update development status to production/stable
+
 ## 1.1.10
 - Fix bug where the IAM path was not being passed in to the uploader
 
