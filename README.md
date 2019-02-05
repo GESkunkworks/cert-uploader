@@ -13,6 +13,16 @@ pip install cert-uploader
 
 ## Usage
 
+### Help Text
+
+```
+cert-uploader --help
+
+cert-uploader iam --help
+
+cert-uploader acm --help
+```
+
 ### IAM
 
 Scan for certificates in the current directory and upload to IAM:
