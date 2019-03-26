@@ -4,4 +4,4 @@ dist/
 *.egg-info
 .eggs/
 __pycache__/
-version.txt
+cert_uploader/version.py

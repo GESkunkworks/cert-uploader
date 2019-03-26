@@ -1,5 +1,3 @@
-import os
-
 from argparse import ArgumentParser
 from time import sleep
 
@@ -7,8 +5,8 @@ from .scan import scan_for_certificates
 from .uploader import ACMCertificateUploader, IAMCertificateUploader
 
 def get_version():
-    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'version.txt'), 'r') as f:
-        return f.read()
+    from .version import version
+    return version
 
 def main():
     parser = ArgumentParser(

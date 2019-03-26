@@ -1,2 +1,1 @@
-include version.txt
-exclude .gitignore
+include cert_uploader/version.py
