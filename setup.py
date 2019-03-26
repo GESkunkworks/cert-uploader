@@ -10,7 +10,7 @@ setup(
     long_description_content_type='text/markdown',
     keywords='certificate cert uploader tools aws iam acm',
     url='https://github.com/GESkunkworks/cert-uploader',
-    use_scm_version=True,
+    use_scm_version={'write_to': 'version.py'},
     author='Michael Palmer',
     author_email='github@michaeldpalmer.com',
     packages=find_packages(),

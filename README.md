@@ -85,7 +85,8 @@ cert-uploader   --load-balancer load-balancer-name \
 Scan for certificates in the current directory and upload to ACM:
 ```
 cert-uploader   --scan \
-                acm
+                acm \
+                --region region-name
 ```
 
 Upload a new certificate to ACM:

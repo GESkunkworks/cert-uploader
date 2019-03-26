@@ -10,9 +10,12 @@ class ACMCertificateUploader(CertificateUploader):
     Uploads new certificates and applies them to an ELB
     """
 
-    def __init__(self, profile=None, role=None):
+    def __init__(self, profile=None, role=None, region=None):
         super(ACMCertificateUploader, self).__init__(profile, role)
-        self._acm_client = self.session.client('acm')
+        args = {}
+        if region:
+            args.update({'region_name': region})
+        self._acm_client = self.session.client('acm', **args)
 
     def get_server_certificate(self, arn):
         """

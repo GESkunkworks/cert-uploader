@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from time import sleep
 
+from version import version
 from .scan import scan_for_certificates
 from .uploader import ACMCertificateUploader, IAMCertificateUploader
 
@@ -29,7 +30,8 @@ def main():
                 --certificate-path path/to/certificate.crt \\
                 --private-key-path path/to/key.pem \\
                 --certificate-chain-path path/to/chain.crt \\
-                acm
+                acm \\
+                --region us-east-1
                 
         Upload a new certificate to ACM and add tags:
             cert-uploader \\
@@ -147,6 +149,13 @@ def main():
         default=None
     )
 
+    parser.add_argument(
+        '--version',
+        help='Display version number',
+        action='version',
+        version=version
+    )
+
     """
     AWS Certificate Manager Arguments
     """
@@ -164,6 +173,13 @@ def main():
         '-t',
         help='Add tags to the certificate',
         action='append'
+    )
+
+    acm_parser.add_argument(
+        '--region',
+        '-r',
+        help='Region to upload certificate to',
+        default=None
     )
 
     """
@@ -192,7 +208,7 @@ def main():
     if options.type == 'iam':
         uploader = IAMCertificateUploader(profile=options.profile, role=options.role)
     elif options.type == 'acm':
-        uploader = ACMCertificateUploader(profile=options.profile, role=options.role)
+        uploader = ACMCertificateUploader(profile=options.profile, role=options.role, region=options.region)
     else:
         parser.print_help()
         return

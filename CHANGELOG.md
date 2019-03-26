@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 1.1.12
+- Add version argument
+- Support specific regions within ACM
+
 ## 1.1.11
 - Update development status to production/stable
 
