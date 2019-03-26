@@ -1,10 +1,14 @@
+import os
+
 from argparse import ArgumentParser
 from time import sleep
 
-from version import version
 from .scan import scan_for_certificates
 from .uploader import ACMCertificateUploader, IAMCertificateUploader
 
+def get_version():
+    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'version.txt'), 'r') as f:
+        return f.read()
 
 def main():
     parser = ArgumentParser(
@@ -153,7 +157,7 @@ def main():
         '--version',
         help='Display version number',
         action='version',
-        version=version
+        version=get_version()
     )
 
     """
