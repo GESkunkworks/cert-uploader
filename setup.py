@@ -14,6 +14,7 @@ setup(
     author='Michael Palmer',
     author_email='github@michaeldpalmer.com',
     packages=find_packages(),
+    include_package_data=True,
     setup_requires=['setuptools_scm~=3.1.0'],
     install_requires=[
         'boto3~=1.7.16',
