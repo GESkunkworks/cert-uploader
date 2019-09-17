@@ -1,0 +1,32 @@
+language: python
+
+python:
+#  - '2.7'
+  - '3.7'
+
+env:
+  global:
+    - AWS_DEFAULT_REGION=us-east-1
+    - AWS_ACCESS_KEY_ID=dummy
+    - AWS_SECRET_ACCESS_KEY=dummy
+    - AWS_SESSION_TOKEN=dummy
+    - AWS_SECURITY_TOKEN=dummy
+
+install:
+  - pip install coverage python-coveralls flake8
+
+script:
+  - flake8 cert_uploader
+  - coverage run setup.py test
+
+after_success:
+  - coveralls
+
+deploy:
+  provider: pypi
+  user:
+    secure: O7G1vHwUOmxsrEVKWN7HoDWwHgilyjQmOiB5L/hO5uPXqmdn+dsOlo3cgcm81jpFF1gOi3LB/TFs2Wf8vSpLvmt0eZ3cNtizArJVLDSgftgO3INh9wzksuUif8mbUQesHq0Jg0a3f0H31FzF9FNbGv5JWSjOaq8+SlvA/Y1uaKni/WGvTqJzioKqq7so6vAUEXcHtGMyBX2GysiRzK9/3uJ6cWvVhBuco70y5EPfIsp9LrcjKiRlyeT/0fGmF+iRqKKTNokTnzzoTNAc+0DSBHF7af+tEwX5D0uEES+myMCGiesESkMJbMrEpTJZJwHQw8FIdwo5mFu1yp4mP0sW0d5ez4dQeC90apMsPSBHbDav3esvpnfteNUcTvBP5gm9XlLNcYlmMemLgIyBtbJ6VbdBUbsvRnPzhT3FwG3AL4ek7QfFA8r4wT5SKwmqqsvEpezO9hln8POdnIMHQTvnbmFh2pQtGUCDC48tH2fzNI6O5hpCc+oQ2bET1wAdZDzNbFN3Rcf+fUvFRoYtbS+tL9v3RlX419fwjuzkWmdxJcnYavaGOvVkwWNoVPa4xRlcPExVMSsiqswOF6/CzFzuHAqQKPqTU2sJpsuvp0hPCu4CWTaH6XV20idnnJff/wTEyp9Kd2UJ4dZEA2ATEdrXKKa9+KAE0NKnApiRyoLHfL0=
+  password:
+    secure: GqDXuTwWpN02xc2MESvRCf58oycZes9/n0rXNirvrD9NkP8JOUy8BMvN2PjEVcR7K/dC9zXJ1b162zuyJbnF8/YpoHeYxmaCEfRTtDNk0l1YhEk11rnild8JBxfeybHZOLJTYfHtd1Xn7yAFMfj/HMrzaTvETc0mVzPfJP6INKhy6BXQDljCrUkYvCEAVou1opXBJYTT/PdPQuzCs5/AONHPpBXYwJWgh+gAQ0NRuxX6Eu1rcAwobBdpNXMc2Wssgi8VkM14iUukwpegwxnbWX57izG00aojd+9rytadVgy7cV5Oid5GIBz9S3p++S1WzroLiGUDA8mX6n1L6ZIFN6Qmd/EwKUr5TYryHLyccZTyE21IbnjaVl6J84YIGsJTz3xbD7NqgOlEw/CFDSN57sepaEi8h7QGsJ5Mg/KUmcaCAT6tIi9JXhf7TGd5JAGxBJ4Jpk+pcdVIHv/j1pXmezvvYKkaUSGhS5+afwC12+97RVWS20rjxt3KPZCDSFkFyzeEBtxrt8RmCnKrUF27PTQmysBdrMepCUSLdvVBQKpjCmKwI3o69KHdDOy8TYQPwM9XQe/PvkzwiXaZrwHvUoXxl4FQlG2loFjPE1XoeccctIyxF4uEZdRFXtLCW9yzmt0ewKtcemoHKhJfPwFskYpT08hzOEMv0mK42aIlhvI=
+  on:
+    tags: true

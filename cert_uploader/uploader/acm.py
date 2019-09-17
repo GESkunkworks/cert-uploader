@@ -71,7 +71,7 @@ class ACMCertificateUploader(CertificateUploader):
             print('\tPrivate Key File Path (local system): %s' % private_key_data)
             print('\tCertificate Chain File Path (local system): %s' % chain_data)
 
-    def tag_certificate(self, arn, tags=None):
+    def tag_certificate(self, arn, tags):
         """
         Add tags to a certificate
 
@@ -84,7 +84,7 @@ class ACMCertificateUploader(CertificateUploader):
         :return: Response
         """
         if not tags:
-            tags = {}
+            return
 
         # Build the tag list
         tag_list = [{'Key': key, 'Value': value} for key, value in tags.items()]

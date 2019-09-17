@@ -5,3 +5,5 @@ dist/
 .eggs/
 __pycache__/
 cert_uploader/version.py
+.coverage
+

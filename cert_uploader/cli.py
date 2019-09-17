@@ -1,24 +1,28 @@
+import re
 from argparse import ArgumentParser
 from time import sleep
 
+from botocore.exceptions import ClientError
+
 from .scan import scan_for_certificates
 from .uploader import ACMCertificateUploader, IAMCertificateUploader
+
 
 def get_version():
     from .version import version
     return version
 
+
 def main():
     parser = ArgumentParser(
         description='Upload ACM/IAM certificates and apply them to ELBs',
-        usage=
-        '''
+        usage='''
         Scan for certificates in the current directory and upload to IAM:
             cert-uploader \\
                 --scan \\
                 iam \\
                 --certificate-name cert-name
-        
+
         Upload a new certificate to IAM:
             cert-uploader \\
                 --certificate-path path/to/certificate.crt \\
@@ -26,7 +30,7 @@ def main():
                 --certificate-chain-path path/to/chain.crt \\
                 iam
                 --certificate-name cert-name
-        
+
         Upload a new certificate to ACM:
             cert-uploader \\
                 --certificate-path path/to/certificate.crt \\
@@ -34,7 +38,7 @@ def main():
                 --certificate-chain-path path/to/chain.crt \\
                 acm \\
                 --region us-east-1
-                
+
         Upload a new certificate to ACM and add tags:
             cert-uploader \\
                 --certificate-path path/to/certificate.crt \\
@@ -43,7 +47,7 @@ def main():
                 acm \\
                 --tag Name=cert \\
                 --tag App=app1
-                
+
         Upload a new certificate to IAM and assign it to a load balancer:
             cert-uploader \\
                 --certificate-path path/to/certificate.crt \\
@@ -52,19 +56,19 @@ def main():
                 --load-balancer load-balancer-name \\
                 iam \\
                 --certificate-name cert-name
-                
+
         Assign an existing IAM certificate to a load balancer:
             cert-uploader \\
                 --load-balancer load-balancer-name \\
                 iam \\
                 --certificate-name cert-name
-                
+
         Assign an existing ACM certificate to a load balancer:
             cert-uploader \\
                 --load-balancer load-balancer-name \\
                 acm \\
                 --certificate-arn arn:aws:acm:REGION:ACCOUNT:certificate/CERTIFICATE_ID
-                
+
         Upload a new IAM certificate at the path "/test" and assign it to a load balancer:
             cert-uploader \\
                 --load-balancer load-balancer-name \\
@@ -74,7 +78,7 @@ def main():
                 iam \\
                 --certificate-name cert-name \\
                 --iam-path /test
-                
+
         Upload a new ACM certificate and assign it to a load balancer on port 8443:
             cert-uploader \\
                 --load-balancer load-balancer-name \\
@@ -259,23 +263,39 @@ def main():
 
     else:
         # Fetch an existing certificate
-        if options.type == 'acm' and options.certificate_arn:
-            arn = options.certificate_arn
-        elif options.type == 'iam' and options.certificate_name:
-            certificate = uploader.get_server_certificate(options.certificate_name)
-            arn = certificate.arn
+        if options.type == 'acm':
+            if options.certificate_arn:
+                arn = options.certificate_arn
+
+                # Make sure the certificate exists
+                try:
+                    uploader.get_server_certificate(arn)
+                except ClientError as e:
+                    if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                        print('Certificate with ARN "%s" not found' % arn)
+                        exit(1)
+                    else:
+                        raise
+            else:
+                print('Missing required argument --certificate-arn')
+                exit(1)
+
+        elif options.type == 'iam':
+            if options.certificate_name:
+                certificate = uploader.get_server_certificate(options.certificate_name)
+                arn = certificate.arn
+            else:
+                print('Missing required argument --certificate-name')
+                exit(1)
 
     # Add tags to the certificate
     if options.type == 'acm' and options.tag:
-
-        # Make sure an ARN was specified
-        if not arn:
-            print('Certificate ARN is not defined. Either upload a new certificate or specify an existing ARN.')
-            exit(1)
-
         # Build the tags
         tag_dict = {}
         for item in options.tag:
+            if not re.match('^([a-zA-Z0-9-]+)=([a-zA-Z0-9-]+)$', item):
+                print('Invalid tag "%s". Tag items must be formatted key=value and must be alpha-numeric.' % item)
+                exit(1)
             tag_parts = item.split('=')
             tag_dict.update({tag_parts[0]: tag_parts[1]})
 
@@ -284,16 +304,10 @@ def main():
 
     # Assign certificate to a load balancer
     if options.load_balancer:
-
-        # Ensure an ARN has been found
-        if not arn:
-            print('ERROR: Certificate could not be found. Either upload a new certificate or specify an existing one.')
-            exit(1)
-
         # Wait a couple seconds for the certificate to be ready
         if is_new_cert and not options.dry_run:
             for i in range(10, 0, -1):
-                print('Waiting for certificate to propagate... %d' %i)
+                print('Waiting for certificate to propagate... %d' % i)
                 sleep(1)
 
             # Add some spacing

@@ -1,5 +1,9 @@
 # Certificate Uploader
 
+[![Coverage Status](https://coveralls.io/repos/github/GESkunkworks/cert-uploader/badge.svg?branch=master)](https://coveralls.io/github/GESkunkworks/cert-uploader?branch=feature/unit-tests)
+
+[![Build Status](https://travis-ci.com/GESkunkworks/cert-uploader.svg?branch=master)](https://travis-ci.com/GESkunkworks/cert-uploader)
+
 Upload ACM/IAM Server Certificates and apply them to ELBs
 
 

@@ -17,11 +17,18 @@ setup(
     include_package_data=True,
     setup_requires=['setuptools_scm~=3.1.0'],
     install_requires=[
-        'boto3~=1.7.16',
+        'boto3~=1.9.228',
         'cryptography~=2.3.0',
         'pyOpenSSL~=17.5.0',
         'scandir~=1.7;python_version<"3.0"',
         'six~=1.11.0'
+    ],
+    tests_require=[
+        'coverage~=4.5.4',
+        'flake8~=3.7.8',
+        'mock~=3.0.5',
+        'moto~=1.3.13',
+        'python-coveralls~=2.9.3'
     ],
     entry_points={
         'console_scripts': [

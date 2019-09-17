@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 1.1.13
+- Unit tests
+
 ## 1.1.12
 - Add version argument
 - Support specific regions within ACM

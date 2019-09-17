@@ -244,6 +244,7 @@ class CertificateUploader(object):
 
             # Request verification from the user
             if six.PY2:
+                from __builtin__ import raw_input
                 input_method = raw_input
             else:
                 input_method = input
@@ -263,7 +264,7 @@ class CertificateUploader(object):
                     raise Exception('Unable to apply certificate to ELB: %s' % response)
 
                 # Check for rollback
-                if input_method('Would you like to roll back? (y/n): ') == 'y':
+                if input_method('Would you like to keep this change? (y/n): ') == 'n':
                     # Roll back the certificate
                     response = self._elb_client.set_load_balancer_listener_ssl_certificate(
                         LoadBalancerName=lb_name,
@@ -311,6 +312,6 @@ class CertificateUploader(object):
                       'lb_port': lb_port
                   })
 
-    def tag_certificate(self, arn, tags=None):
+    def tag_certificate(self, arn, tags):
         """Add tags to a certificate"""
         raise NotImplementedError

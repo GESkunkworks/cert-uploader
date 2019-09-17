@@ -136,6 +136,7 @@ def validate_certificates(cert_info):
 
     # Request verification from the user
     if six.PY2:
+        from __builtin__ import raw_input
         input_method = raw_input
     else:
         input_method = input
